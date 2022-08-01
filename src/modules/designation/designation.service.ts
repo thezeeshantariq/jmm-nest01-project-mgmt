@@ -16,7 +16,7 @@ export class DesignationService {
   }
 
   findAll() {
-    return this.repository.find();
+    return this.repository.find({ relations: ['profiles'] });
   }
 
   findOne(id: number) {
