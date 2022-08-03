@@ -1,11 +1,25 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+import { CreateProjectDto } from '../project/dto/create-project.dto';
+import { ProjectService } from '../project/project.service';
 import { ClientService } from './client.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
+import { Client } from './entities/client.entity';
 
-@Controller('client')
+@Controller('clients')
 export class ClientController {
-  constructor(private readonly clientService: ClientService) {}
+  constructor(
+    private readonly clientService: ClientService,
+    private readonly projectService: ProjectService,
+  ) {}
 
   @Post()
   create(@Body() createClientDto: CreateClientDto) {
@@ -30,5 +44,26 @@ export class ClientController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.clientService.remove(+id);
+  }
+
+  /**
+   * PROJECTS
+   */
+
+  @Get(':id/projects')
+  async listProjects(@Param('id') id: number) {
+    const client = await this.clientService.findOne(id, ['projects']);
+    return client.projects;
+  }
+
+  @Post(':id/projects')
+  async addProject(
+    @Param('id') id: number,
+    @Body() projectDto: CreateProjectDto,
+  ) {
+    return await this.projectService.create({
+      ...projectDto,
+      client: { id } as Client,
+    });
   }
 }

@@ -19,8 +19,8 @@ export class ClientService {
     return `This action returns all client`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} client`;
+  findOne(id: number, relations = []) {
+    return this.repository.findOne({ where: { id }, relations });
   }
 
   update(id: number, updateClientDto: UpdateClientDto) {
