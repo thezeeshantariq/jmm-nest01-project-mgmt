@@ -4,6 +4,7 @@ import { Task } from '../../task/entities/task.entity';
 import { Team } from '../../team/entities/team.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../base.entity';
+import { Client } from '../../client/entities/client.entity';
 
 @Entity('projects')
 export class Project extends BaseEntity {
@@ -39,4 +40,7 @@ export class Project extends BaseEntity {
 
   @OneToMany(() => Task, (task) => task.project)
   task: Task[];
+
+  @ManyToOne(() => Client, (client) => client.projects)
+  client: Client;
 }
