@@ -1,7 +1,16 @@
 import { Designation } from '../../designation/entities/designation.entity';
 import { User } from '../../user/entities/user.entity';
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import { BaseEntity } from '../../base.entity';
+import { Team } from '../../team/entities/team.entity';
+import { Task } from '../../task/entities/task.entity';
 
 @Entity('profiles')
 export class Profile extends BaseEntity {
@@ -24,4 +33,10 @@ export class Profile extends BaseEntity {
 
   @ManyToOne(() => Designation, (designation) => designation.profiles)
   designation: Designation;
+
+  @ManyToOne(() => Team, (team) => team.profiles)
+  team: Team;
+
+  @OneToMany(() => Task, (task) => task.assignee)
+  task: Task[];
 }
