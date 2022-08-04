@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
@@ -30,5 +38,11 @@ export class ProfileController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.profileService.remove(+id);
+  }
+
+  @Get(':id/tasks')
+  async tasks(@Param('id') id: number) {
+    const profile = await this.profileService.findOne(id, ['task']);
+    return profile.task;
   }
 }

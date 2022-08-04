@@ -2,6 +2,7 @@ import { Profile } from '../../profile/entities/profile.entity';
 import { Project } from '../../project/entities/project.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../base.entity';
+import { TaskStatus } from '../enums/task-status.enum';
 
 @Entity('tasks')
 export class Task extends BaseEntity {
@@ -23,8 +24,8 @@ export class Task extends BaseEntity {
   @Column({ nullable: true })
   estimatedDuration: string;
 
-  @Column({ default: false })
-  status: boolean;
+  @Column({ type: 'enum', enum: TaskStatus, default: TaskStatus.TODO })
+  status: string;
 
   @ManyToOne(() => Project, (project) => project.task)
   project: Project;

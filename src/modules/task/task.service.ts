@@ -1,11 +1,17 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Client } from '../client/entities/client.entity';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { Task } from './entities/task.entity';
 
 @Injectable()
 export class TaskService {
+  constructor(@InjectRepository(Task) private repository: Repository<Task>) {}
+
   create(createTaskDto: CreateTaskDto) {
-    return 'This action adds a new task';
+    return this.repository.save(createTaskDto);
   }
 
   findAll() {
@@ -22,5 +28,14 @@ export class TaskService {
 
   remove(id: number) {
     return `This action removes a #${id} task`;
+  }
+
+  async assignToProfile(taskId: number, profileId: number) {
+    return await this.repository.update(
+      {
+        id: taskId,
+      },
+      { assignee: { id: profileId } },
+    );
   }
 }

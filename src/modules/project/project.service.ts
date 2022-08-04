@@ -19,8 +19,11 @@ export class ProjectService {
     return this.repository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} project`;
+  findOne(id: number, relations = []) {
+    return this.repository.findOne({
+      where: { id },
+      relations,
+    });
   }
 
   update(id: number, updateProjectDto: UpdateProjectDto) {

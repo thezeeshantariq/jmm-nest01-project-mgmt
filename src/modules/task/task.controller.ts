@@ -1,9 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 
-@Controller('task')
+@Controller('tasks')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
@@ -30,5 +38,14 @@ export class TaskController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.taskService.remove(+id);
+  }
+
+  // assign person to task
+  @Patch(':id/assign-to-profile')
+  async assignToProfile(
+    @Param('id') taskId: number,
+    @Body('profileId') profileId: number,
+  ) {
+    return await this.taskService.assignToProfile(taskId, profileId);
   }
 }
